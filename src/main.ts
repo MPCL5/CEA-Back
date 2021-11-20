@@ -12,7 +12,6 @@ async function bootstrap() {
     .setTitle('CEA Admin Back-end')
     .setDescription('The admin API description')
     .setVersion('1.0')
-    .addTag('user')
     .addBearerAuth(
       {
         type: 'http',
@@ -36,7 +35,6 @@ async function bootstrap() {
     .setTitle('CEA Client Back-end')
     .setDescription('The client API description')
     .setVersion('1.0')
-    .addTag('client')
     .build();
   const clientDocument = SwaggerModule.createDocument(
     app,

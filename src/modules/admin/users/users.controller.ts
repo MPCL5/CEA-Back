@@ -1,10 +1,10 @@
-import { Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { Controller, Get, Param, Post } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 
 @ApiBearerAuth('jwt-token')
-@ApiTags('user')
-@Controller('user')
+@ApiTags('users')
+@Controller('admin/users')
 export class UserController {
   constructor(private readonly userService: UsersService) {}
 
@@ -23,7 +23,7 @@ export class UserController {
     return null;
   }
 
-  @Put('my-profile')
+  @Post('my-profile')
   async editProfile(): Promise<any> {
     return null;
   }
@@ -33,9 +33,9 @@ export class UserController {
     return null;
   }
 
-  @Put()
-  async updateUser(): Promise<any> {
-    return null;
+  @Post(':id')
+  async updateUser(@Param('id') id: number): Promise<any> {
+    return id;
   }
 
   @Post(':id/active')
