@@ -1,4 +1,11 @@
 import { registerAs } from '@nestjs/config';
+import { Comment } from 'src/domain/Comment';
+import { Event } from 'src/domain/Event';
+import { EventDetails } from 'src/domain/EventDetails';
+import { Media } from 'src/domain/Media';
+import { News } from 'src/domain/News';
+import { Question } from 'src/domain/Question';
+import { Teacher } from 'src/domain/Teacher';
 import { User } from 'src/domain/User';
 
 export default registerAs('database', () => ({
@@ -8,6 +15,15 @@ export default registerAs('database', () => ({
   username: process.env.DATABASE_USER,
   password: process.env.DATABASE_PASSWORD,
   database: process.env.DATABASE_NAME,
-  entities: [User],
+  entities: [
+    User,
+    Question,
+    News,
+    Media,
+    Event,
+    EventDetails,
+    Comment,
+    Teacher,
+  ],
   synchronize: true, // shouldn't be used in production
 }));
