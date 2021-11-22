@@ -1,5 +1,12 @@
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Event } from './Event';
+import { Media } from './Media';
 
 @Entity()
 export class EventDetails {
@@ -23,6 +30,10 @@ export class EventDetails {
 
   @Column()
   requirenemtns: string;
+
+  @OneToOne(() => Media)
+  @JoinColumn()
+  bigImage: Media;
 
   @OneToOne(() => Event, (event) => event.details)
   event: Event;

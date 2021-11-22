@@ -1,9 +1,18 @@
-import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  JoinTable,
+  ManyToMany,
+  OneToMany,
+  OneToOne,
+} from 'typeorm';
 import { Comment } from './Comment';
 import { EventStatus } from './enums/EventStatus';
 import { EventDetails } from './EventDetails';
 import { News } from './News';
 import { Post } from './Post';
+import { Teacher } from './Teacher';
 
 @Entity()
 export class Event extends Post {
@@ -25,7 +34,11 @@ export class Event extends Post {
   @OneToMany(() => Comment, (comment) => comment.event)
   comments: Comment[];
 
-  @OneToOne(() => EventDetails)
+  @OneToOne(() => EventDetails, { cascade: ['insert'] })
   @JoinColumn()
   details: EventDetails;
+
+  @ManyToMany(() => Teacher, (teacher) => teacher.events)
+  @JoinTable()
+  teachers: Teacher[];
 }
