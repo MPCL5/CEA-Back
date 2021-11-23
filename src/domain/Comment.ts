@@ -42,7 +42,7 @@ export class Comment {
   @ManyToOne(() => Comment, (comment) => comment.replies)
   replyTo: Comment;
 
-  @OneToMany(() => Comment, (comment) => comment.replyTo, { eager: true })
+  @OneToMany(() => Comment, (comment) => comment.replyTo)
   replies: Comment[];
 
   @CreateDateColumn()
