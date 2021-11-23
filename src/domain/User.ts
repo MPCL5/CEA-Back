@@ -5,17 +5,15 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Name } from './Name';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  firstName: string;
-
-  @Column()
-  lastName: string;
+  @Column(() => Name)
+  name: Name;
 
   @Column()
   isActive: boolean;

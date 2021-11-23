@@ -13,22 +13,22 @@ export class EventDetails {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  description: string;
-
-  @Column()
+  @Column({ type: 'varchar', length: 255 })
   location: string;
 
-  @Column()
+  @Column({ type: 'mediumint' })
   price: number;
 
-  @Column()
+  @Column({ type: 'varchar', length: 255 })
   signUpLink: string;
 
-  @Column()
+  @Column({ type: 'text' })
+  description: string;
+
+  @Column({ type: 'text' })
   topics: string;
 
-  @Column()
+  @Column({ type: 'text' })
   requirenemtns: string;
 
   @OneToOne(() => Media)

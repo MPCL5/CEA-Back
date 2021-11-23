@@ -2,7 +2,6 @@ import {
   Column,
   Entity,
   JoinColumn,
-  JoinTable,
   ManyToMany,
   OneToMany,
   OneToOne,
@@ -39,6 +38,5 @@ export class Event extends Post {
   details: EventDetails;
 
   @ManyToMany(() => Teacher, (teacher) => teacher.events)
-  @JoinTable()
   teachers: Teacher[];
 }

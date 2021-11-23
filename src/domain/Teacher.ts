@@ -2,25 +2,24 @@ import {
   Column,
   Entity,
   JoinColumn,
+  JoinTable,
   ManyToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Event } from './Event';
 import { Media } from './Media';
+import { Name } from './Name';
 
 @Entity()
 export class Teacher {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  firstName: string;
+  @Column(() => Name)
+  name: Name;
 
-  @Column()
-  lastName: string;
-
-  @Column()
+  @Column({ type: 'text' })
   bio: string;
 
   @OneToOne(() => Media)
@@ -28,5 +27,6 @@ export class Teacher {
   avatar: Media;
 
   @ManyToMany(() => Event, (event) => event.teachers)
+  @JoinTable()
   events: Event[];
 }

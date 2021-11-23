@@ -3,6 +3,7 @@ import {
   CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { QuestionStatus } from './enums/QuestionStatus';
 
@@ -11,13 +12,13 @@ export class Question {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ type: 'varchar', length: 191 })
   name: string;
 
   @Column()
   contact: string;
 
-  @Column()
+  @Column({ type: 'varchar', length: 191 })
   text: string;
 
   @Column({ type: 'enum', enum: QuestionStatus })
@@ -25,4 +26,7 @@ export class Question {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  @UpdateDateColumn()
+  udpateAt: Date;
 }

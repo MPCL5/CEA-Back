@@ -4,6 +4,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -25,6 +26,9 @@ export class Comment {
   @Column({ default: false })
   isAdminAnswer: boolean;
 
+  @Column({ default: false })
+  admited: boolean;
+
   @OneToOne(() => Media)
   @JoinColumn()
   smallImage: Media;
@@ -34,6 +38,12 @@ export class Comment {
 
   @ManyToOne(() => News, (comment) => comment.comments, { nullable: true })
   news: News;
+
+  @ManyToOne(() => Comment, (comment) => comment.replies)
+  replyTo: Comment;
+
+  @OneToMany(() => Comment, (comment) => comment.replyTo, { eager: true })
+  replies: Comment[];
 
   @CreateDateColumn()
   createdAt: Date;

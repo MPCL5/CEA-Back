@@ -1,14 +1,6 @@
-import {
-  Column,
-  Entity,
-  JoinTable,
-  ManyToOne,
-  OneToMany,
-  OneToOne,
-} from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { Comment } from './Comment';
 import { Event } from './Event';
-import { Media } from './Media';
 import { Post } from './Post';
 
 @Entity()
@@ -16,12 +8,11 @@ export class News extends Post {
   @Column()
   title: string;
 
-  @Column()
+  @Column({ type: 'text' })
   text: string;
 
-  @OneToOne(() => Media)
-  @JoinTable()
-  smallImage: Media;
+  @Column()
+  brief: string;
 
   @ManyToOne(() => Event, (event) => event.news, { nullable: true })
   event: Event;
