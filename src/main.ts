@@ -4,11 +4,17 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AdminModule } from './modules/admin/admin.module';
 import { ClientModule } from './modules/client/client.module';
 import { ValidationPipe } from '@nestjs/common';
+import { TransformInterceptor } from './extentions/transform.interceptor';
+import { HttpExceptionFilter } from './extentions/http-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.useGlobalPipes(new ValidationPipe());
+
+  app.useGlobalInterceptors(new TransformInterceptor());
+
+  app.useGlobalFilters(new HttpExceptionFilter());
 
   // Swagger for admin panel.
   const swaggerAdminConfig = new DocumentBuilder()

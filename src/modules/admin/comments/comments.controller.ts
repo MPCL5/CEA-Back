@@ -5,10 +5,19 @@ import {
   NotAcceptableException,
   NotFoundException,
   Param,
+  ParseIntPipe,
   Post,
+  Query,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Comment } from 'src/domain/Comment';
+import { ParsePagePipe } from 'src/extentions/pipes/ParsePagePipe';
+import { ParsePageSizePipe } from 'src/extentions/pipes/ParsePageSizePipe';
+import {
+  ApiPaginatedResponse,
+  getPaginatedQueryParam,
+  PaginatedResponse,
+} from 'src/utils/Paginated';
 import { CommentsService } from './comments.service';
 import { ReplyCommentDto } from './dto/reply-comment.dto';
 
@@ -18,13 +27,33 @@ import { ReplyCommentDto } from './dto/reply-comment.dto';
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
 
+  /**
+   * a list of comments
+   * @returns PaginatedResponse<Comment>
+   */
   @Get()
-  async getComments(): Promise<any> {
-    return null;
+  @ApiPaginatedResponse(Comment)
+  @ApiQuery({ name: 'page', required: false, type: 'number' })
+  @ApiQuery({ name: 'pageSize', required: false, type: 'number' })
+  async getComments(
+    @Query('page', ParsePagePipe) page: number,
+    @Query('pageSize', ParsePageSizePipe) pageSize: number,
+  ): Promise<PaginatedResponse<Comment>> {
+    const { take, skip } = getPaginatedQueryParam(page, pageSize);
+    const [comments, count] = await this.commentsService.getComment(take, skip);
+
+    return {
+      list: comments,
+      total: count,
+      page,
+      pageSize,
+    };
   }
 
   @Get(':id')
-  async getCommentDetails(@Param('id') id: number): Promise<Comment> {
+  async getCommentDetails(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<Comment> {
     const result = await this.commentsService.getCommentById(id);
 
     if (result === null || result === undefined) {
@@ -39,7 +68,7 @@ export class CommentsController {
 
   @Post(':id')
   async replyToComment(
-    @Param('id') id: number,
+    @Param('id', ParseIntPipe) id: number,
     @Body() commet: ReplyCommentDto,
   ): Promise<Comment> {
     const result = await this.commentsService.getCommentById(id);
@@ -71,7 +100,7 @@ export class CommentsController {
   }
 
   @Post(':id/admit')
-  async changeCommentStatus(@Param('id') id: number) {
+  async changeCommentStatus(@Param('id', ParseIntPipe) id: number) {
     const result = await this.commentsService.getCommentById(id, false);
 
     if (result === null || result === undefined) {

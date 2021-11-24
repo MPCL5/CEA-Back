@@ -10,6 +10,13 @@ export class CommentsService {
     private commentsRepository: Repository<Comment>,
   ) {}
 
+  getComment(take, skip) {
+    const result = this.commentsRepository.find({ take, skip });
+    const count = this.commentsRepository.count();
+
+    return Promise.all([result, count]);
+  }
+
   getCommentById(id: number, loadReplies = true): Promise<Comment> {
     const findOptions: FindOneOptions<Comment> = {
       loadRelationIds: { relations: ['replyTo'] },
