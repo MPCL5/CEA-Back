@@ -19,7 +19,7 @@ import {
   PaginatedResponse,
 } from 'src/utils/Paginated';
 import { CommentsService } from './comments.service';
-import { ReplyCommentDto } from './dto/reply-comment.dto';
+import { ReplyCommentDto } from './dto/replyComment.dto';
 
 @ApiBearerAuth('jwt-token')
 @ApiTags('comments')
@@ -40,7 +40,10 @@ export class CommentsController {
     @Query('pageSize', ParsePageSizePipe) pageSize: number,
   ): Promise<PaginatedResponse<Comment>> {
     const { take, skip } = getPaginatedQueryParam(page, pageSize);
-    const [comments, count] = await this.commentsService.getComment(take, skip);
+    const [comments, count] = await this.commentsService.getComments(
+      take,
+      skip,
+    );
 
     return {
       list: comments,

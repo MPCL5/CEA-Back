@@ -21,7 +21,11 @@ export class Question {
   @Column({ type: 'varchar', length: 191 })
   text: string;
 
-  @Column({ type: 'enum', enum: QuestionStatus })
+  @Column({
+    type: 'enum',
+    enum: QuestionStatus,
+    default: QuestionStatus.NeedAction,
+  })
   status: QuestionStatus;
 
   @CreateDateColumn()

@@ -12,7 +12,7 @@ export class ParsePageSizePipe extends ParseIntPipe implements PipeTransform {
     if (value === '' || value === undefined || value === null) {
       return 10;
     } else if (+value === 0) {
-      throw new NotAcceptableException();
+      throw new NotAcceptableException('Page Size must be greater than 0');
     }
 
     value = super.transform(value, metadata);

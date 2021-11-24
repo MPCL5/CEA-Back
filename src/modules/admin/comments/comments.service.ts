@@ -10,8 +10,12 @@ export class CommentsService {
     private commentsRepository: Repository<Comment>,
   ) {}
 
-  getComment(take, skip) {
-    const result = this.commentsRepository.find({ take, skip });
+  getComments(take: number, skip: number) {
+    const result = this.commentsRepository.find({
+      take,
+      skip,
+      relations: ['news', 'event'],
+    });
     const count = this.commentsRepository.count();
 
     return Promise.all([result, count]);

@@ -1,6 +1,6 @@
 export enum QuestionStatus {
-  Pending,
-  NeedAction,
-  Answered,
-  Ignored,
+  Pending = 'Pending',
+  NeedAction = 'NeedAction',
+  Answered = 'Answered',
+  Ignored = 'Ignored',
 }
