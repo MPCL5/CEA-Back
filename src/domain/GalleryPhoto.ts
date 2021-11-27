@@ -1,23 +1,24 @@
+import { Exclude } from 'class-transformer';
 import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  JoinColumn,
+  // JoinColumn,
   ManyToOne,
-  OneToOne,
+  // OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Gallery } from './Galleries';
-import { Media } from './Media';
+// import { Media } from './Media';
 
 @Entity()
 export class GalleryPhoto {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => Media)
-  @JoinColumn()
-  media: Media;
+  /* @OneToOne(() => Media, { eager: true })
+  @JoinColumn() */
+  fileId: number;
 
   @ManyToOne(() => Gallery, (gallery) => gallery.photoes)
   gallery: Gallery;
@@ -25,6 +26,7 @@ export class GalleryPhoto {
   @CreateDateColumn()
   createdAt: Date;
 
+  @Exclude()
   @DeleteDateColumn()
   deletedAt: Date;
 }

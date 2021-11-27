@@ -19,7 +19,7 @@ import {
   PaginatedResponse,
 } from 'src/utils/Paginated';
 import { CommentsService } from './comments.service';
-import { ReplyCommentDto } from './dto/replyComment.dto';
+import { ReplyCommentDto } from './dto/ReplyComment.dto';
 
 @ApiBearerAuth('jwt-token')
 @ApiTags('comments')
@@ -74,7 +74,7 @@ export class CommentsController {
     @Param('id', ParseIntPipe) id: number,
     @Body() commet: ReplyCommentDto,
   ): Promise<Comment> {
-    const result = await this.commentsService.getCommentById(id);
+    const result = await this.commentsService.getCommentById(id, false);
 
     if (result === null || result === undefined) {
       throw new NotFoundException();
@@ -95,9 +95,6 @@ export class CommentsController {
       result,
       replayComment,
     );
-
-    // TODO: find a better way to do this.
-    resultComment.replyTo = undefined;
 
     return resultComment;
   }

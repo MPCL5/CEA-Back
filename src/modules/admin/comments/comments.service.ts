@@ -37,12 +37,10 @@ export class CommentsService {
     sourceComment: Comment,
     replyComment: Comment,
   ): Promise<Comment> {
+    replyComment.replyTo = sourceComment;
     await this.commentsRepository.save(replyComment);
 
-    sourceComment.replies = [...sourceComment.replies, replyComment];
-    await this.commentsRepository.save(sourceComment);
-
-    return sourceComment;
+    return replyComment;
   }
 
   async updateComment(comment: Comment): Promise<Comment> {

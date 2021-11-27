@@ -30,4 +30,5 @@ export default registerAs('database', () => ({
     GalleryPhoto,
   ],
   synchronize: true, // shouldn't be used in production
+  logging: true,
 }));

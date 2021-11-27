@@ -11,7 +11,7 @@ export class QuestionsService {
     private readonly questionRepository: Repository<Question>,
   ) {}
 
-  getQuestions(take, skip): Promise<[Question[], number]> {
+  getQuestions(take: number, skip: number): Promise<[Question[], number]> {
     const questions = this.questionRepository.find({ take, skip });
     const count = this.questionRepository.count();
 

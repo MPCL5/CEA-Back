@@ -12,6 +12,9 @@ export class Gallery {
   @Column()
   description: string;
 
+  @Column({ default: true })
+  active: boolean;
+
   @OneToMany(() => GalleryPhoto, (photo) => photo.gallery)
   photoes: GalleryPhoto[];
 }
