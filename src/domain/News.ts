@@ -1,4 +1,11 @@
-import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
+import { Exclude } from 'class-transformer';
+import {
+  Column,
+  DeleteDateColumn,
+  Entity,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm';
 import { Comment } from './Comment';
 import { Event } from './Event';
 import { Post } from './Post';
@@ -19,4 +26,8 @@ export class News extends Post {
 
   @OneToMany(() => Comment, (comment) => comment.news, { nullable: true })
   comments: Comment[];
+
+  @Exclude()
+  @DeleteDateColumn()
+  deletedAt: Date;
 }

@@ -21,7 +21,7 @@ import {
 } from 'src/utils/Paginated';
 import { AddPhotoDto } from './dto/AddPhoto.dto';
 import { CreateGalleryDto } from './dto/CreateGallery.dto';
-import { UpdateGalleryDto } from './dto/UpdateGalleryDto';
+import { UpdateGalleryDto } from './dto/UpdateGallery.dto';
 import { GalleriesService } from './galleries.service';
 
 @ApiBearerAuth('jwt-token')
@@ -96,7 +96,7 @@ export class GalleriesController {
 
   @Post(':id/photo')
   async addPhotoToGallery(
-    @Param('id') id: number,
+    @Param('id', ParseIntPipe) id: number,
     @Body() addPhotoDto: AddPhotoDto,
   ) {
     const gallery = await this.galleriesService.getGalleryById(id);
