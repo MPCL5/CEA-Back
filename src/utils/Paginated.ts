@@ -25,6 +25,7 @@ export const ApiPaginatedResponse = <TModel extends Type<any>>(
   return applyDecorators(
     ApiOkResponse({
       schema: {
+        title: `PaginatedResponseOf${model.name}`,
         allOf: [
           { $ref: getSchemaPath(PaginatedResponse) },
           {

@@ -1,7 +1,6 @@
 import { registerAs } from '@nestjs/config';
 import { Comment } from 'src/domain/Comment';
 import { Event } from 'src/domain/Event';
-import { EventDetails } from 'src/domain/EventDetails';
 import { Gallery } from 'src/domain/Galleries';
 import { GalleryPhoto } from 'src/domain/GalleryPhoto';
 import { Media } from 'src/domain/Media';
@@ -23,7 +22,6 @@ export default registerAs('database', () => ({
     News,
     Media,
     Event,
-    EventDetails,
     Comment,
     Teacher,
     Gallery,

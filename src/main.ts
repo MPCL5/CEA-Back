@@ -6,6 +6,7 @@ import { ClientModule } from './modules/client/client.module';
 import { ValidationPipe } from '@nestjs/common';
 import { TransformInterceptor } from './extentions/transform.interceptor';
 import { HttpExceptionFilter } from './extentions/http-exception.filter';
+import { PaginatedResponse } from './utils/Paginated';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -35,6 +36,7 @@ async function bootstrap() {
     .build();
   const adminDocument = SwaggerModule.createDocument(app, swaggerAdminConfig, {
     include: [AdminModule],
+    extraModels: [PaginatedResponse],
     deepScanRoutes: true,
   });
   SwaggerModule.setup('/swagger/admin', app, adminDocument);
@@ -48,9 +50,9 @@ async function bootstrap() {
   const clientDocument = SwaggerModule.createDocument(
     app,
     swaggerClientConfig,
-    { include: [ClientModule] },
+    { include: [ClientModule], extraModels: [PaginatedResponse] },
   );
-  SwaggerModule.setup('/swagger/client', app, clientDocument);
+  SwaggerModule.setup('/swagger/client', app, clientDocument, {});
 
   await app.listen(8080);
 }
