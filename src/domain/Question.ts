@@ -18,7 +18,7 @@ export class Question {
   @Column()
   contact: string;
 
-  @Column({ type: 'varchar', length: 191 })
+  @Column({ type: 'text' })
   text: string;
 
   @Column({
