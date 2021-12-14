@@ -9,11 +9,24 @@ export default class Factory<T> {
     return result;
   }
 
-  createMany(count = 1, overloads?: Partial<T> | null): T[] {
+  createMany(
+    count = 1,
+    overloads?: null | Partial<T> | ((index: number) => Partial<T>),
+  ): T[] {
     if (overloads === null) {
       overloads = {};
     }
 
-    return [...new Array(count)].map(() => this.createOne(overloads));
+    const result = [];
+
+    for (let i = 0; i < count; i++) {
+      if (typeof overloads === 'function') {
+        result.push(this.createOne(overloads(i)));
+      } else {
+        result.push(this.createOne(overloads));
+      }
+    }
+
+    return result;
   }
 }

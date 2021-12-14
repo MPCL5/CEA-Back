@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from 'src/modules/database/database.module';
 import { Seeder } from './seeder.service';
 import { QuestionSeederModule } from './seeders/QuestionSeeder/question.module';
+import { UserSeederModule } from './seeders/UserSeeder/user.module';
 
 /**
  * Import and provide seeder classes.
@@ -17,6 +18,7 @@ import { QuestionSeederModule } from './seeders/QuestionSeeder/question.module';
     }),
     DatabaseModule,
     QuestionSeederModule,
+    UserSeederModule,
   ],
   providers: [Logger, Seeder],
 })

@@ -15,7 +15,10 @@ export class User {
   @Column(() => Name)
   name: Name;
 
-  @Column()
+  @Column({ type: 'varchar', length: 192 })
+  studentCode: string;
+
+  @Column({ default: true })
   isActive: boolean;
 
   @Column()
