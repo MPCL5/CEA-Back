@@ -10,6 +10,10 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) {}
 
+  async findOne(studentCode: string): Promise<User | undefined> {
+    return this.usersRepository.findOne({ where: { studentCode } });
+  }
+
   async getAllUsers(): Promise<User[]> {
     const query = this.usersRepository.find();
 

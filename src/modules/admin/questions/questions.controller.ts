@@ -7,9 +7,11 @@ import {
   ParseIntPipe,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Question } from 'src/domain/Question';
+import { JwtAuthGuard } from 'src/extentions/guards/JwtAuthGuard ';
 import { ParsePagePipe } from 'src/extentions/pipes/ParsePagePipe';
 import { ParsePageSizePipe } from 'src/extentions/pipes/ParsePageSizePipe';
 import {
@@ -22,6 +24,7 @@ import { QuestionsService } from './questions.service';
 
 @ApiBearerAuth('jwt-token')
 @ApiTags('questions')
+@UseGuards(JwtAuthGuard)
 @Controller('admin/questions')
 export class QuestionsController {
   constructor(private readonly questionService: QuestionsService) {}
