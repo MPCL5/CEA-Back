@@ -8,9 +8,11 @@ import {
   ParseIntPipe,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Comment } from 'src/domain/Comment';
+import { JwtAuthGuard } from 'src/extentions/guards/JwtAuthGuard ';
 import { ParsePagePipe } from 'src/extentions/pipes/ParsePagePipe';
 import { ParsePageSizePipe } from 'src/extentions/pipes/ParsePageSizePipe';
 import {
@@ -23,6 +25,7 @@ import { ReplyCommentDto } from './dto/ReplyComment.dto';
 
 @ApiBearerAuth('jwt-token')
 @ApiTags('comments')
+@UseGuards(JwtAuthGuard)
 @Controller('admin/comments')
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}

@@ -8,10 +8,12 @@ import {
   ParseIntPipe,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Gallery } from 'src/domain/Galleries';
 import { GalleryPhoto } from 'src/domain/GalleryPhoto';
+import { JwtAuthGuard } from 'src/extentions/guards/JwtAuthGuard ';
 import { ParsePagePipe } from 'src/extentions/pipes/ParsePagePipe';
 import { ParsePageSizePipe } from 'src/extentions/pipes/ParsePageSizePipe';
 import {
@@ -26,6 +28,7 @@ import { GalleriesService } from './galleries.service';
 
 @ApiBearerAuth('jwt-token')
 @ApiTags('galleries')
+@UseGuards(JwtAuthGuard)
 @Controller('admin/galleries')
 export class GalleriesController {
   constructor(private readonly galleriesService: GalleriesService) {}

@@ -8,10 +8,12 @@ import {
   ParseIntPipe,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Comment } from 'src/domain/Comment';
 import { News } from 'src/domain/News';
+import { JwtAuthGuard } from 'src/extentions/guards/JwtAuthGuard ';
 import { ParsePagePipe } from 'src/extentions/pipes/ParsePagePipe';
 import { ParsePageSizePipe } from 'src/extentions/pipes/ParsePageSizePipe';
 import {
@@ -25,6 +27,7 @@ import { NewsService } from './news.service';
 
 @ApiBearerAuth('jwt-token')
 @ApiTags('news')
+@UseGuards(JwtAuthGuard)
 @Controller('admin/news')
 export class NewsController {
   constructor(private readonly newsService: NewsService) {}

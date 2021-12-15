@@ -7,9 +7,11 @@ import {
   ParseIntPipe,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Event } from 'src/domain/Event';
+import { JwtAuthGuard } from 'src/extentions/guards/JwtAuthGuard ';
 import { ParsePagePipe } from 'src/extentions/pipes/ParsePagePipe';
 import { ParsePageSizePipe } from 'src/extentions/pipes/ParsePageSizePipe';
 import {
@@ -21,6 +23,7 @@ import { EventsService } from './events.service';
 
 @ApiBearerAuth('jwt-token')
 @ApiTags('events')
+@UseGuards(JwtAuthGuard)
 @Controller('admin/events')
 export class EventsController {
   constructor(private readonly eventsService: EventsService) {}
