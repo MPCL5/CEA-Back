@@ -16,7 +16,7 @@ export class AuthService {
     password: string,
   ): Promise<Partial<User> | null> {
     const user = await this.usersService.findOne(studentCode);
-    const isPasswordRight = await compare(password, user.password);
+    const isPasswordRight = user && (await compare(password, user.password));
 
     if (user && isPasswordRight) {
       const { password: _, ...result } = user;
