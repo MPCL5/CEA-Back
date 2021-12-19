@@ -7,15 +7,21 @@ import { ValidationPipe } from '@nestjs/common';
 import { TransformInterceptor } from './extentions/transform.interceptor';
 import { HttpExceptionFilter } from './extentions/http-exception.filter';
 import { PaginatedResponse } from './utils/Paginated';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { join } from 'path';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
   app.useGlobalInterceptors(new TransformInterceptor());
 
   app.useGlobalFilters(new HttpExceptionFilter());
+
+  app.useStaticAssets(join(process.cwd(), 'storage'), {
+    prefix: '/storage/',
+  });
 
   // Swagger for admin panel.
   const swaggerAdminConfig = new DocumentBuilder()

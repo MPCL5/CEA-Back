@@ -1,6 +1,14 @@
-import { Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Post,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/extentions/guards/JwtAuthGuard ';
+import UserResultDto from './Dto/UserResult.dto';
 import { UsersService } from './users.service';
 
 @ApiBearerAuth('jwt-token')
@@ -15,14 +23,16 @@ export class UserController {
     return this.userService.getAllUsers();
   }
 
-  @Get(':id')
-  async getUserDetails(@Param('id') id: number): Promise<any> {
-    return id;
-  }
-
   @Get('my-profile')
-  async getProfile(): Promise<null> {
-    return null;
+  async getProfile(@Request() req): Promise<UserResultDto> {
+    const user = await this.userService.findOne(req.user.studentCode);
+
+    const result = new UserResultDto();
+    result.studentCode = user.studentCode;
+    result.firstName = user.name.first;
+    result.lastName = user.name.last;
+
+    return result;
   }
 
   @Post('my-profile')
@@ -33,6 +43,11 @@ export class UserController {
   @Post()
   async createUser(): Promise<any> {
     return null;
+  }
+
+  @Get(':id')
+  async getUserDetails(@Param('id') id: number): Promise<any> {
+    return id;
   }
 
   @Post(':id')
