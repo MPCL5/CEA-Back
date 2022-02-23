@@ -19,6 +19,9 @@ export class Teacher {
   @Column(() => Name)
   name: Name;
 
+  @Column()
+  jobTitle: string;
+
   @Column({ type: 'text' })
   bio: string;
 

@@ -1,6 +1,7 @@
-import { Column, Entity, ManyToMany, OneToMany } from 'typeorm';
+import { Column, Entity, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
 import { Comment } from './Comment';
 import { EventStatus } from './enums/EventStatus';
+import { Gallery } from './Galleries';
 import { News } from './News';
 import { Post } from './Post';
 import { Teacher } from './Teacher';
@@ -42,6 +43,9 @@ export class Event extends Post {
 
   @Column()
   bigImage: number;
+
+  @ManyToOne(() => Gallery, (gallery) => gallery.event)
+  gallery: Gallery;
 
   @OneToMany(() => News, (news) => news.event)
   news: News[];

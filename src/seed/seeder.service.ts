@@ -1,4 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { NewsSeederService } from './seeders/NewsSeeder/news.service';
 import { QuestionSeederService } from './seeders/QuestionSeeder/question.service';
 import { UserSeederService } from './seeders/UserSeeder/user.service';
 
@@ -8,7 +9,21 @@ export class Seeder {
     private readonly logger: Logger,
     private readonly questionSeederService: QuestionSeederService,
     private readonly userSeederService: UserSeederService,
+    private readonly newsSeederService: NewsSeederService,
   ) {}
+
+  private async processResult<T>(
+    seederRunner: () => Promise<Promise<T>[]> | Promise<T>[],
+  ): Promise<boolean> {
+    const created = await Promise.all(await seederRunner());
+    this.logger.debug(
+      'No. of users created : ' +
+        // Remove all null values and return only created.
+        created.filter((nullValueOrCreated) => nullValueOrCreated).length,
+    );
+    return true;
+  }
+
   async seed() {
     await this.questions()
       .then((completed) => {
@@ -29,37 +44,27 @@ export class Seeder {
         this.logger.error('Failed seeding users...');
         Promise.reject(error);
       });
+
+    await this.news()
+      .then((completed) => {
+        this.logger.debug('Successfuly completed seeding news...');
+        Promise.resolve(completed);
+      })
+      .catch((error) => {
+        this.logger.error('Failed seeding news...');
+        Promise.reject(error);
+      });
   }
 
   async questions() {
-    return await Promise.all(this.questionSeederService.create())
-      .then((createdQuestions) => {
-        // Can also use this.logger.verbose('...');
-        this.logger.debug(
-          'No. of questions created : ' +
-            // Remove all null values and return only created languages.
-            createdQuestions.filter(
-              (nullValueOrCreatedLanguage) => nullValueOrCreatedLanguage,
-            ).length,
-        );
-        return Promise.resolve(true);
-      })
-      .catch((error) => Promise.reject(error));
+    return await this.processResult(() => this.questionSeederService.create());
   }
 
   async users() {
-    return await Promise.all(this.userSeederService.create())
-      .then((createdUsers) => {
-        // Can also use this.logger.verbose('...');
-        this.logger.debug(
-          'No. of users created : ' +
-            // Remove all null values and return only created languages.
-            createdUsers.filter(
-              (nullValueOrCreatedLanguage) => nullValueOrCreatedLanguage,
-            ).length,
-        );
-        return Promise.resolve(true);
-      })
-      .catch((error) => Promise.reject(error));
+    return await this.processResult(() => this.userSeederService.create());
+  }
+
+  async news() {
+    return await this.processResult(() => this.newsSeederService.create());
   }
 }

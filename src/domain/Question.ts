@@ -16,7 +16,7 @@ export class Question {
   name: string;
 
   @Column()
-  contact: string;
+  contact: string; // email or phone.
 
   @Column({ type: 'text' })
   text: string;

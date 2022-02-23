@@ -18,11 +18,11 @@ export class QuestionSeederService {
    *
    * @function
    */
-  create(): Array<Promise<Question>> {
+  async create(): Promise<Array<Promise<Question>>> {
     const factory = new Factory<Question>(fakeQuestionGenerator);
     const created = factory.createMany(10);
 
-    this.questionRepository.clear();
+    await this.questionRepository.clear();
 
     return created.map(async (question) => {
       const dbQuestion = await this.questionRepository.findOne(

@@ -20,7 +20,7 @@ export class Comment {
   @Column()
   name: string;
 
-  @Column()
+  @Column({ type: 'text' })
   text: string;
 
   @Column({ default: false })

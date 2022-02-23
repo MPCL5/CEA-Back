@@ -13,17 +13,17 @@ export class UserSeederService {
   ) {}
 
   /**
-   * Seed all languages.
+   * Seed all users.
    *
    * @function
    */
-  create(): Array<Promise<User>> {
+  async create(): Promise<Array<Promise<User>>> {
     const factory = new Factory<User>(fakeUserGenerator);
     const created = factory.createMany(10, (index) => ({
       studentCode: `97536100${index}`,
     }));
 
-    this.userRepository.clear();
+    await this.userRepository.clear();
 
     return created.map(async (user) => {
       const dbUser = await this.userRepository.findOne({
