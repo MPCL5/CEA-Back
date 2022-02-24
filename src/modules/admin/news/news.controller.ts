@@ -10,7 +10,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Comment } from 'src/domain/Comment';
 import { News } from 'src/domain/News';
 import { JwtAuthGuard } from 'src/extentions/guards/JwtAuthGuard ';
@@ -34,21 +34,14 @@ export class NewsController {
 
   @Get()
   @ApiPaginatedResponse(News)
-  @ApiQuery({ name: 'page', required: false, type: 'number' })
-  @ApiQuery({ name: 'pageSize', required: false, type: 'number' })
   async getNews(
     @Query('page', ParsePagePipe) page: number,
     @Query('pageSize', ParsePageSizePipe) pageSize: number,
   ): Promise<PaginatedResponse<News>> {
     const { take, skip } = getPaginatedQueryParam(page, pageSize);
-    const [result, count] = await this.newsService.getNews(take, skip);
+    const queryResult = await this.newsService.getNews(take, skip);
 
-    return {
-      list: result,
-      total: count,
-      page,
-      pageSize,
-    };
+    return new PaginatedResponse<News>(queryResult, page, pageSize);
   }
 
   @Get(':id')
@@ -64,8 +57,6 @@ export class NewsController {
 
   @Get(':id/comments')
   @ApiPaginatedResponse(Comment)
-  @ApiQuery({ name: 'page', required: false, type: 'number' })
-  @ApiQuery({ name: 'pageSize', required: false, type: 'number' })
   async getNewsComments(
     @Param('id', ParseIntPipe) id: number,
     @Query('page', ParsePagePipe) page: number,
@@ -78,18 +69,13 @@ export class NewsController {
     }
 
     const { take, skip } = getPaginatedQueryParam(page, pageSize);
-    const [result, count] = await this.newsService.getNewsComments(
+    const queryResult = await this.newsService.getNewsComments(
       news,
       take,
       skip,
     );
 
-    return {
-      list: result,
-      total: count,
-      page,
-      pageSize,
-    };
+    return new PaginatedResponse<Comment>(queryResult, page, pageSize);
   }
 
   @Post()

@@ -9,7 +9,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Event } from 'src/domain/Event';
 import { JwtAuthGuard } from 'src/extentions/guards/JwtAuthGuard ';
 import { ParsePagePipe } from 'src/extentions/pipes/ParsePagePipe';
@@ -30,21 +30,14 @@ export class EventsController {
 
   @Get()
   @ApiPaginatedResponse(Event)
-  @ApiQuery({ name: 'page', required: false, type: 'number' })
-  @ApiQuery({ name: 'pageSize', required: false, type: 'number' })
   async getEvents(
     @Query('page', ParsePagePipe) page: number,
     @Query('pageSize', ParsePageSizePipe) pageSize: number,
   ): Promise<PaginatedResponse<Event>> {
     const { take, skip } = getPaginatedQueryParam(page, pageSize);
-    const [result, count] = await this.eventsService.getEvents(take, skip);
+    const queryResult = await this.eventsService.getEvents(take, skip);
 
-    return {
-      list: result,
-      total: count,
-      page,
-      pageSize,
-    };
+    return new PaginatedResponse<Event>(queryResult, page, pageSize);
   }
 
   @Get(':id')

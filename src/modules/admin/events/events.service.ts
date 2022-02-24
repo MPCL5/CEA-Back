@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Event } from 'src/domain/Event';
-import { Repository } from 'typeorm';
+import { FindOneOptions, Repository } from 'typeorm';
 
 @Injectable()
 export class EventsService {
@@ -21,9 +21,13 @@ export class EventsService {
     return Promise.all([result, count]);
   }
 
-  getEventDetailsById(id: number): Promise<Event> {
-    return this.eventRepository.findOne(id, {
-      relations: ['news', 'teachers'],
-    });
+  getEventDetailsById(id: number, loadRelations = true): Promise<Event> {
+    const findOptions: FindOneOptions<Event> = {};
+
+    if (loadRelations) {
+      findOptions.relations = ['news', 'teachers'];
+    }
+
+    return this.eventRepository.findOne(id, findOptions);
   }
 }

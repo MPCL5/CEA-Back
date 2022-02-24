@@ -5,11 +5,20 @@ import {
   NotImplementedException,
   Post,
   Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/extentions/guards/JwtAuthGuard ';
 import { TeachersService } from './teachers.service';
+import {
+  ApiPaginatedResponse,
+  getPaginatedQueryParam,
+  PaginatedResponse,
+} from '../../../utils/Paginated';
+import { ParsePagePipe } from '../../../extentions/pipes/ParsePagePipe';
+import { ParsePageSizePipe } from '../../../extentions/pipes/ParsePageSizePipe';
+import { Teacher } from '../../../domain/Teacher';
 
 @ApiBearerAuth('jwt-token')
 @ApiTags('teacher')
@@ -19,8 +28,15 @@ export class TeachersController {
   constructor(private readonly teacherService: TeachersService) {}
 
   @Get()
-  getTeachersList() {
-    throw new NotImplementedException();
+  @ApiPaginatedResponse(Teacher)
+  async getTeachersList(
+    @Query('page', ParsePagePipe) page: number,
+    @Query('pageSize', ParsePageSizePipe) pageSize: number,
+  ): Promise<PaginatedResponse<Teacher>> {
+    const { take, skip } = getPaginatedQueryParam(page, pageSize);
+    const queryResult = await this.teacherService.getTeachers(take, skip);
+
+    return new PaginatedResponse<Teacher>(queryResult, page, pageSize);
   }
 
   @Get(':id')

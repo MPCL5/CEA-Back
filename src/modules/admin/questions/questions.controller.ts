@@ -9,7 +9,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Question } from 'src/domain/Question';
 import { JwtAuthGuard } from 'src/extentions/guards/JwtAuthGuard ';
 import { ParsePagePipe } from 'src/extentions/pipes/ParsePagePipe';
@@ -31,24 +31,14 @@ export class QuestionsController {
 
   @Get()
   @ApiPaginatedResponse(Question)
-  @ApiQuery({ name: 'page', required: false, type: 'number' })
-  @ApiQuery({ name: 'pageSize', required: false, type: 'number' })
   async getQuestions(
     @Query('page', ParsePagePipe) page: number,
     @Query('pageSize', ParsePageSizePipe) pageSize: number,
   ): Promise<PaginatedResponse<Question>> {
     const { take, skip } = getPaginatedQueryParam(page, pageSize);
-    const [questions, count] = await this.questionService.getQuestions(
-      take,
-      skip,
-    );
+    const queryResult = await this.questionService.getQuestions(take, skip);
 
-    return {
-      list: questions,
-      total: count,
-      page,
-      pageSize,
-    };
+    return new PaginatedResponse<Question>(queryResult, page, pageSize);
   }
 
   @Get(':id')

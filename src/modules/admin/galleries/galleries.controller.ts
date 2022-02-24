@@ -10,7 +10,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Gallery } from 'src/domain/Galleries';
 import { GalleryPhoto } from 'src/domain/GalleryPhoto';
 import { JwtAuthGuard } from 'src/extentions/guards/JwtAuthGuard ';
@@ -35,24 +35,14 @@ export class GalleriesController {
 
   @Get()
   @ApiPaginatedResponse(Gallery)
-  @ApiQuery({ name: 'page', required: false, type: 'number' })
-  @ApiQuery({ name: 'pageSize', required: false, type: 'number' })
   async getGalleries(
     @Query('page', ParsePagePipe) page: number,
     @Query('pageSize', ParsePageSizePipe) pageSize: number,
   ): Promise<PaginatedResponse<Gallery>> {
     const { take, skip } = getPaginatedQueryParam(page, pageSize);
-    const [result, count] = await this.galleriesService.getGalleries(
-      take,
-      skip,
-    );
+    const queryResult = await this.galleriesService.getGalleries(take, skip);
 
-    return {
-      list: result,
-      total: count,
-      page,
-      pageSize,
-    };
+    return new PaginatedResponse<Gallery>(queryResult, page, pageSize);
   }
 
   @Get(':id')

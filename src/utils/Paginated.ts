@@ -1,7 +1,14 @@
 import { applyDecorators, Type } from '@nestjs/common';
-import { ApiOkResponse, getSchemaPath } from '@nestjs/swagger';
+import { ApiOkResponse, ApiQuery, getSchemaPath } from '@nestjs/swagger';
 
 export class PaginatedResponse<T> {
+  constructor(queryResult: [T[], number], page: number, pageSize: number) {
+    this.list = queryResult[0];
+    this.total = queryResult[1];
+    this.page = page;
+    this.pageSize = pageSize;
+  }
+
   list: T[];
   page: number;
   pageSize: number;
@@ -48,5 +55,7 @@ export const ApiPaginatedResponse = <TModel extends Type<any>>(
         ],
       },
     }),
+    ApiQuery({ name: 'page', required: false, type: 'number' }),
+    ApiQuery({ name: 'pageSize', required: false, type: 'number' }),
   );
 };
